@@ -3,10 +3,15 @@ package br.com.juniorfduarte.forum.service
 import br.com.juniorfduarte.forum.domain.Curso
 import br.com.juniorfduarte.forum.domain.Topico
 import br.com.juniorfduarte.forum.domain.Usuario
+import br.com.juniorfduarte.forum.dto.TopicoDto
 import org.springframework.stereotype.Service
 
 @Service
-class TopicoService(private var topicos: List<Topico>) {
+class TopicoService(
+    private var topicos: List<Topico>,
+    private var cursoService: CursoService,
+    private var usuarioService: UsuarioService
+) {
 
     init {
         val topico1 = Topico(
@@ -57,7 +62,7 @@ class TopicoService(private var topicos: List<Topico>) {
             )
         )
 
-        topicos = listOf(topico1, topico2, topico3)
+        topicos = mutableListOf(topico1, topico2, topico3)
     }
 
     fun listar(): List<Topico> {
@@ -66,16 +71,26 @@ class TopicoService(private var topicos: List<Topico>) {
 
     fun findById(id: Long): Topico {
         return topicos.stream().filter {
-            t -> t.id == id
+            it -> it.id == id
         }.findFirst().get()
     }
 
-    fun save(topico: Topico): List<Topico> {
+    fun save(dto: TopicoDto): MutableList<List<Topico>> {
+        val topicosList = mutableListOf(topicos)
 
-        val list = listOf<Topico>()
+        val curso = cursoService.findById(dto.idCurso)
+        val usuario = usuarioService.findById(dto.idAutor)
 
-        topicos.plus(topico)
-        return topicos
+        val topico = Topico(
+                id = topicos.size.toLong().plus(1),
+                titulo = dto.titulo,
+                mensagem = dto.mensagem,
+                curso = curso,
+                autor = usuario
+            )
+
+        topicosList.plus(topico)
+        return topicosList
     }
 
 }

@@ -1,6 +1,7 @@
 package br.com.juniorfduarte.forum.controllers
 
 import br.com.juniorfduarte.forum.domain.Topico
+import br.com.juniorfduarte.forum.dto.TopicoDto
 import br.com.juniorfduarte.forum.service.TopicoService
 import org.springframework.web.bind.annotation.*
 
@@ -21,8 +22,8 @@ class TopicoController(
     }
 
     @PostMapping
-    fun cadastroTopico(@RequestBody topico: Topico): List<Topico> {
-        return service.save(topico)
+    fun cadastroTopico(@RequestBody dto: TopicoDto): MutableList<List<Topico>> {
+        return service.save(dto)
     }
 
 

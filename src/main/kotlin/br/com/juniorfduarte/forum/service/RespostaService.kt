@@ -45,7 +45,7 @@ class RespostaService(private var respostas: List<Resposta>) {
             solucao = false
         )
 
-        respostas = listOf(resposta, resposta2)
+        respostas = mutableListOf(resposta, resposta2)
     }
 
     fun getRespostasByTopicoId(id: Long): List<Resposta> {
@@ -53,4 +53,6 @@ class RespostaService(private var respostas: List<Resposta>) {
             r.topico.id == id
         }.collect(Collectors.toList())
     }
+
+    // TODO -> Implementar função save
 }
