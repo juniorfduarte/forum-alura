@@ -1,6 +1,6 @@
 package br.com.juniorfduarte.forum.dto
 
-data class TopicoDto (
+data class TopicoForm (
     val titulo: String,
     val mensagem: String,
     val idCurso: Long,

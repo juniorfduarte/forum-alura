@@ -1,7 +1,8 @@
 package br.com.juniorfduarte.forum.controllers
 
 import br.com.juniorfduarte.forum.domain.Topico
-import br.com.juniorfduarte.forum.dto.TopicoDto
+import br.com.juniorfduarte.forum.dto.TopicoForm
+import br.com.juniorfduarte.forum.dto.TopicoView
 import br.com.juniorfduarte.forum.service.TopicoService
 import org.springframework.web.bind.annotation.*
 
@@ -12,19 +13,17 @@ class TopicoController(
 ) {
 
     @GetMapping
-    fun listar(): List<Topico> {
+    fun listar(): List<TopicoView> {
         return service.listar()
     }
 
     @GetMapping("/{id}")
-    fun getTopico(@PathVariable id: Long): Topico {
+    fun getTopico(@PathVariable id: Long): TopicoView {
         return service.findById(id)
     }
 
     @PostMapping
-    fun cadastroTopico(@RequestBody dto: TopicoDto): List<Topico> {
+    fun cadastroTopico(@RequestBody dto: TopicoForm): List<Topico> {
         return service.save(dto)
     }
-
-
 }

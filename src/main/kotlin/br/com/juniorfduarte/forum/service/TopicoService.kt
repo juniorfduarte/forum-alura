@@ -3,8 +3,10 @@ package br.com.juniorfduarte.forum.service
 import br.com.juniorfduarte.forum.domain.Curso
 import br.com.juniorfduarte.forum.domain.Topico
 import br.com.juniorfduarte.forum.domain.Usuario
-import br.com.juniorfduarte.forum.dto.TopicoDto
+import br.com.juniorfduarte.forum.dto.TopicoForm
+import br.com.juniorfduarte.forum.dto.TopicoView
 import org.springframework.stereotype.Service
+import java.util.stream.Collectors
 
 @Service
 class TopicoService(
@@ -65,17 +67,19 @@ class TopicoService(
         topicos = mutableListOf(topico1, topico2, topico3)
     }
 
-    fun listar(): List<Topico> {
-        return topicos
+    fun listar(): List<TopicoView> {
+        return topicos.stream().map {
+            it -> it.toTopicoView()
+        }.collect(Collectors.toList())
     }
 
-    fun findById(id: Long): Topico {
+    fun findById(id: Long): TopicoView {
         return topicos.stream().filter {
             it -> it.id == id
-        }.findFirst().get()
+        }.findFirst().get().toTopicoView()
     }
 
-    fun save(dto: TopicoDto): List<Topico> {
+    fun save(dto: TopicoForm): List<Topico> {
         val curso = cursoService.findById(dto.idCurso)
         val usuario = usuarioService.findById(dto.idAutor)
 
@@ -87,8 +91,8 @@ class TopicoService(
                 autor = usuario
             )
 
-        val topicosList = topicos.plus(topico)
-        return topicosList
+        topicos = topicos.plus(topico)
+        return topicos
     }
 
 }
