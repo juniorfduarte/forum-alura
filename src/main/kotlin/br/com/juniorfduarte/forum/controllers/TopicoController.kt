@@ -23,7 +23,7 @@ class TopicoController(
     }
 
     @PostMapping
-    fun cadastroTopico(@RequestBody dto: TopicoForm): List<Topico> {
+    fun cadastroTopico(@RequestBody dto: TopicoForm): List<TopicoView> {
         return service.save(dto)
     }
 }

@@ -5,14 +5,16 @@ import br.com.juniorfduarte.forum.domain.Topico
 import br.com.juniorfduarte.forum.domain.Usuario
 import br.com.juniorfduarte.forum.dto.TopicoForm
 import br.com.juniorfduarte.forum.dto.TopicoView
+import br.com.juniorfduarte.forum.mapper.TopicoFormMapper
+import br.com.juniorfduarte.forum.mapper.TopicoViewMapper
 import org.springframework.stereotype.Service
 import java.util.stream.Collectors
 
 @Service
 class TopicoService(
     private var topicos: List<Topico>,
-    private var cursoService: CursoService,
-    private var usuarioService: UsuarioService
+    private val topicoViewMapper: TopicoViewMapper,
+    private val topicoFormMapper: TopicoFormMapper
 ) {
 
     init {
@@ -69,30 +71,23 @@ class TopicoService(
 
     fun listar(): List<TopicoView> {
         return topicos.stream().map {
-            it -> it.toTopicoView()
+            it -> topicoViewMapper.map(it)
         }.collect(Collectors.toList())
     }
 
     fun findById(id: Long): TopicoView {
-        return topicos.stream().filter {
+        val topico = topicos.stream().filter {
             it -> it.id == id
-        }.findFirst().get().toTopicoView()
+        }.findFirst().get()
+
+        return topicoViewMapper.map(topico)
     }
 
-    fun save(dto: TopicoForm): List<Topico> {
-        val curso = cursoService.findById(dto.idCurso)
-        val usuario = usuarioService.findById(dto.idAutor)
-
-        val topico = Topico(
-                id = topicos.size.toLong().plus(1),
-                titulo = dto.titulo,
-                mensagem = dto.mensagem,
-                curso = curso,
-                autor = usuario
-            )
-
+    fun save(form: TopicoForm): List<TopicoView> {
+        val topico = topicoFormMapper.map(form)
+        topico.id = topicos.size.toLong() + 1
         topicos = topicos.plus(topico)
-        return topicos
+        return this.listar()
     }
 
 }
