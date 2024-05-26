@@ -22,7 +22,7 @@ class TopicoController(
     }
 
     @PostMapping
-    fun cadastroTopico(@RequestBody dto: TopicoDto): MutableList<List<Topico>> {
+    fun cadastroTopico(@RequestBody dto: TopicoDto): List<Topico> {
         return service.save(dto)
     }
 

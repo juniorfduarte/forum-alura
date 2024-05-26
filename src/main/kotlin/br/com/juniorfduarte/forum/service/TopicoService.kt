@@ -75,9 +75,7 @@ class TopicoService(
         }.findFirst().get()
     }
 
-    fun save(dto: TopicoDto): MutableList<List<Topico>> {
-        val topicosList = mutableListOf(topicos)
-
+    fun save(dto: TopicoDto): List<Topico> {
         val curso = cursoService.findById(dto.idCurso)
         val usuario = usuarioService.findById(dto.idAutor)
 
@@ -89,7 +87,7 @@ class TopicoService(
                 autor = usuario
             )
 
-        topicosList.plus(topico)
+        val topicosList = topicos.plus(topico)
         return topicosList
     }
 
